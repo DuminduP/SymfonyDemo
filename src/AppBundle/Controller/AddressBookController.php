@@ -109,7 +109,7 @@ class AddressBookController extends Controller
         if (!$address) {
             throw $this->createNotFoundException('The adderss does not exist');
         }
-        if ($address->getPicture()) {
+        if ($address->getPicture() && file_exists($this->getParameter('photos_directory') . '/' . $address->getPicture())) {
             unlink($this->getParameter('photos_directory') . '/' . $address->getPicture());
         }
 
