@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{app.request.get('id')?'Edit':'Add New' }} Address - Address Book
+{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="row">
+			<div class="col-10">
+				<h2>{{app.request.get('id')?'Edit':'Add New' }} Address</h2>
+			</div>
+			<div class="col-2">
+				<a href="{{url('address_list')}}" class="float-end">Home</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		{{ form_start(form) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_firstname" class="col-form-label">Firstname</label>
+			</span>
+			{{ form_widget(form.firstname, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.firstname) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_lastname" class="col-form-label">Lastname</label>
+			</span>
+			{{ form_widget(form.lastname, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.lastname) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_phoneNumber" class="col-form-label">Phone Number</label>
+			</span>
+			{{ form_widget(form.phoneNumber, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.phoneNumber) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_birthday" class="col-form-label">Birthday</label>
+			</span>
+			{{ form_widget(form.birthday, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.birthday) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_emailAddress" class="col-form-label">Email Address</label>
+			</span>
+			{{ form_widget(form.emailAddress, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.emailAddress) }}
+		<div class="input-group  mb-2">
+			<div class="input-group-text">
+				{% if app.request.get('id') %}
+					<img src="{{ asset('uploads/photo/'~ form.vars.value.picture.filename|default('blank_photo.jpg') ) }}" class="img-thumbnail" alt="Picture"/>
+					{% if form.vars.value.picture %}
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="1" name="deletePicture" id="flexCheckDefault">
+							<label class="form-check-label" for="flexCheckDefault">
+								Delete
+							</label>
+						</div>
+					{% else %}
+						(No picture)
+					{% endif %}
+				{% else %}
+					<label for="address_picture" class="col-form-label">Picture (optional)</label>
+				{% endif %}
+			</div>
+			{{ form_widget(form.picture, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.picture) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_streetNumber" class="col-form-label">Street and number</label>
+			</span>
+			{{ form_widget(form.streetNumber, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.streetNumber) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_zip" class="col-form-label">Zip</label>
+			</span>
+			{{ form_widget(form.zip, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.zip) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_city" class="col-form-label">City</label>
+			</span>
+			{{ form_widget(form.city, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.city) }}
+		<div class="input-group  mb-2">
+			<span class="input-group-text">
+				<label for="address_country" class="col-form-label">Country</label>
+			</span>
+			{{ form_widget(form.country, {attr: {class: 'form-control'}}) }}
+		</div>
+		{{ form_errors(form.country) }}
+		{% if app.request.get('id') %}
+			<div class="row">
+				<div class="col-6">
+					<a href="{{url('remove_address',{'id' : app.request.get('id')})}}" class="btn btn-danger float-start" id="delete-btn" onclick="return confirm('Are you sure you want to delete?');" >Delete</a>
+				</div>
+				<div class="col-6 d-grid gap-2">
+					<input type="submit" class="btn btn-primary float-end" value="Edit"/>
+				</div>
+			</div>
+		{% else %}
+			<div class="d-grid gap-2">
+				<input type="submit" class="btn btn-primary" value="Add"/>
+			</div>
+		{% endif %}
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

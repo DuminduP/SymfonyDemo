@@ -1,7 +1,76 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}List All Addresses - Address Book{% endblock %}  
+{% block title %}SF Address Book
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
-    <h1>Hi {{ name|upper }}</h1>
+	<div class="row">
+		<div class="col-10">
+			<h1>Address Book</h1>
+		</div>
+		<div class="col-2">
+			<a href="{{url('add_address')}}" class="btn btn-primary float-end">Add New</a>
+		</div>
+	</div>
+
+	{% for message in app.flashes('notice') %}
+		<div class="alert alert-success" role="alert">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	{% if addresses is not empty %}
+		<table class="table table-striped " id='address_table'>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Address</th>
+					<th>Phone Number</th>
+					<th>Email</th>
+					<th>Birthday</th>
+					<th>Picture</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for address in addresses %}
+					<tr>
+						<td>
+							<a href='{{url('edit_address',{'id' : address.id})}}'>{{ address.firstname }}
+								{{ address.lastname }}</a>
+						</td>
+						<td>{{ address.streetNumber }}<br/>
+							{{ address.zip }}<br/>
+							{{ address.city }}<br/>
+							{{ address.country.name }}</td>
+						<td>{{ address.phoneNumber }}</td>
+						<td>{{ address.emailAddress }}</td>
+						<td>{{ address.birthday|date("d/m/Y") }}</td>
+						<td>
+							<a href='{{url('edit_address',{'id' : address.id})}}'>
+								<img src="{{ asset('uploads/photo/'~ address.picture|default('blank_photo.jpg') ) }}" class="img-thumbnail" alt="Picture of {{ address.firstname }}"/>
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+	<h2>Oh Snap ! :( there are no addresses in database</h2>
+	{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+		$('#address_table').DataTable();
+		});
+	</script>
 {% endblock %}
