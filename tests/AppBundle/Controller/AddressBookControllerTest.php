@@ -19,7 +19,7 @@ class AddressBookControllerTest extends WebTestCase
 
         $link = $crawler
             ->filter('a:contains("Add New")')
-            ->eq(0) // select the second link in the list
+            ->eq(0)
             ->link();
         $crawler = $client->click($link);
         $this->assertStringContainsString('Add New Address', $crawler->filter('.container h2')->text());
