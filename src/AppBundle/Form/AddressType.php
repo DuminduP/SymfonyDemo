@@ -46,6 +46,8 @@ class AddressType extends AbstractType
                 [
                     'class' => Country::class,
                     'choice_label' => 'name',
+                    'empty_data'  => null,
+                    'placeholder' => 'Please select',
                 ])
 
         ;

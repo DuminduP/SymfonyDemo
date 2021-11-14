@@ -16,3 +16,5 @@
 /vendor/
 /web/bundles/
 /web/uploads/
+/var/data/addressbook.db
+/phpunit.result.cache
