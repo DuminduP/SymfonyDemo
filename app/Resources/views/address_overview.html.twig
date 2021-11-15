@@ -11,11 +11,10 @@
 {% block body %}
 	<div class="row">
 		<div class="col-10">
-			<h1>Overview - Address Book</h1>
+			<h2>Overview - Address Book</h2>
 		</div>
 		<div class="col-2">
 			<a href="{{url('address_list')}}" class="float-end">Home</a>
-			<a href="{{url('add_address')}}" class="btn btn-primary float-end" style="margin-right:10px">Add New</a>
 		</div>
 	</div>
 
@@ -25,13 +24,13 @@
                 <img src="{{ asset('all-users.jpg') }}" class="card-img-top" alt="all users">
 				<div class="card-header">Total</div>
 				<div class="card-body">
-					<h5 class="card-title">{{allCount}}</h5>
+					<h5 class="card-title" id="total-count">{{allCount}}</h5>
 					<p class="card-text">Total number of addresses in the address book.</p>
 				</div>
 			</div>
 		</div>
 		<div class="col-4">
-			<div class="card text-dark bg-info mb-3" style="max-width: 18rem;">
+			<div class="card text-dark bg-success mb-3" style="max-width: 18rem;">
                 <img src="{{ asset('with-picture.png') }}" class="card-img-top" alt="with picture">
 				<div class="card-header">Total with Picture</div>
 				<div class="card-body">
@@ -41,7 +40,7 @@
 			</div>
 		</div>
 		<div class="col-4">
-			<div class="card text-dark bg-info mb-3" style="max-width: 18rem;">
+			<div class="card text-dark bg-warning mb-3" style="max-width: 18rem;">
              <img src="{{ asset('uploads/photo/blank_photo.jpg') }}" class="card-img-top" alt="no picture">
 				<div class="card-header">Total without Picture</div>
 				<div class="card-body">

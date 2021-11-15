@@ -109,4 +109,20 @@ class AddressBookControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/address/delete/'.$address->getId());
         $this->assertStringContainsString('Address successfully deleted!', $crawler->filter('.alert-success')->text());
     }
+
+    public function testShowOverviewAction()
+    {
+        $kernel = self::bootKernel();
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+        $allAddress = $this->entityManager->getRepository(Address::class)
+            ->findAll();
+
+        $client = static::createClient();
+        $client->followRedirects();
+        $crawler = $client->request('GET', '/overview');
+        $this->assertStringContainsString('Overview - Address Book', $crawler->filter('.container h2')->text());
+        $this->assertEquals(count($allAddress), $crawler->filter('#total-count')->text());
+    }
 }
