@@ -10,3 +10,6 @@ edit_address:
 remove_address:
     path:     /address/delete/{id}
     defaults: { _controller: AppBundle\Controller\AddressBookController::removeAddressAction }
+address_overview:
+    path:     /overview
+    defaults: { _controller: AppBundle\Controller\AddressBookController::showOverviewAction }

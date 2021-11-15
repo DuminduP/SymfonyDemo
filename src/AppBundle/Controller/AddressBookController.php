@@ -113,7 +113,6 @@ class AddressBookController extends Controller
             unlink($this->getParameter('photos_directory') . '/' . $address->getPicture());
         }
 
-        
         $em = $this->getDoctrine()->getManager();
         $em->remove($address);
         $em->flush();
@@ -121,6 +120,46 @@ class AddressBookController extends Controller
             'notice',
             'Address successfully deleted!'
         );
-            return $this->redirectToRoute('address_list');
+        return $this->redirectToRoute('address_list');
+    }
+
+    public function showOverviewAction()
+    {
+        $repository = $this->getDoctrine()
+            ->getRepository(Address::class);
+
+        $query = $repository->createQueryBuilder("a")
+            ->select("count(a.id)")
+            ->getQuery();
+        $data['allCount'] = $query->getSingleScalarResult();
+
+        $query = $repository->createQueryBuilder("a")
+            ->select("count(a.id)")
+            ->where('a.picture is Null')
+            ->getQuery();
+        $data['noPictureCount'] = $query->getSingleScalarResult();
+
+        $query = $repository->createQueryBuilder("a")
+            ->select("c.name as country, count(a.id) as n")
+            ->join('a.country', 'c')
+            ->groupBy('a.country')
+            ->getQuery();
+        $data['countryCount'] = $query->getScalarResult();
+
+        $em = $this->getDoctrine()->getManager();
+        $sql = "Select
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  < 20 THEN 1 ELSE 0 END) AS [Under 20],
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 20 AND 30 THEN 1 ELSE 0 END) AS [20 - 30],
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 30 AND 40 THEN 1 ELSE 0 END) AS [30 - 40],
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 40 AND 50 THEN 1 ELSE 0 END) AS [40 - 50],
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int) > 50 THEN 1 ELSE 0 END) AS [Over 50]
+       from address a";
+        $stmt = $em->getConnection()->prepare($sql);
+        $stmt->execute();
+
+        $data['ageCount'] = $stmt->fetch();
+
+
+        return $this->render('address_overview.html.twig', $data);
     }
 }
