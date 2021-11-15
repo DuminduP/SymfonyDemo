@@ -148,10 +148,10 @@ class AddressBookController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $sql = "Select
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  < 20 THEN 1 ELSE 0 END) AS [Under 20],
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 20 AND 30 THEN 1 ELSE 0 END) AS [20 - 30],
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 30 AND 40 THEN 1 ELSE 0 END) AS [30 - 40],
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 40 AND 50 THEN 1 ELSE 0 END) AS [40 - 50],
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  < 21 THEN 1 ELSE 0 END) AS [Under 21],
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 21 AND 30 THEN 1 ELSE 0 END) AS [21 - 30],
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 31 AND 40 THEN 1 ELSE 0 END) AS [31 - 40],
+        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 41 AND 50 THEN 1 ELSE 0 END) AS [41 - 50],
         SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int) > 50 THEN 1 ELSE 0 END) AS [Over 50]
        from address a";
         $stmt = $em->getConnection()->prepare($sql);
