@@ -125,40 +125,12 @@ class AddressBookController extends Controller
 
     public function showOverviewAction()
     {
-        $repository = $this->getDoctrine()
-            ->getRepository(Address::class);
+        $repository = $this->getDoctrine()->getRepository(Address::class);
 
-        $query = $repository->createQueryBuilder("a")
-            ->select("count(a.id)")
-            ->getQuery();
-        $data['allCount'] = $query->getSingleScalarResult();
-
-        $query = $repository->createQueryBuilder("a")
-            ->select("count(a.id)")
-            ->where('a.picture is Null')
-            ->getQuery();
-        $data['noPictureCount'] = $query->getSingleScalarResult();
-
-        $query = $repository->createQueryBuilder("a")
-            ->select("c.name as country, count(a.id) as n")
-            ->join('a.country', 'c')
-            ->groupBy('a.country')
-            ->getQuery();
-        $data['countryCount'] = $query->getScalarResult();
-
-        $em = $this->getDoctrine()->getManager();
-        $sql = "Select
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  < 21 THEN 1 ELSE 0 END) AS [Under 21],
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 21 AND 30 THEN 1 ELSE 0 END) AS [21 - 30],
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 31 AND 40 THEN 1 ELSE 0 END) AS [31 - 40],
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int)  BETWEEN 41 AND 50 THEN 1 ELSE 0 END) AS [41 - 50],
-        SUM(CASE WHEN cast(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', birthday) as int) > 50 THEN 1 ELSE 0 END) AS [Over 50]
-       from address a";
-        $stmt = $em->getConnection()->prepare($sql);
-        $stmt->execute();
-
-        $data['ageCount'] = $stmt->fetch();
-
+        $data['allCount']  = $repository->getAllAddressCount();
+        $data['noPictureCount'] = $repository->getNoPictureCount();
+        $data['countryCount'] = $repository->getCountryCount();
+        $data['ageCount'] = $repository->getAgeCount();
 
         return $this->render('address_overview.html.twig', $data);
     }
